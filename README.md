@@ -1,5 +1,8 @@
 # fs.filefs: Custom filesystem for pyfilesystem2
 
+[![PyPI version](https://img.shields.io/pypi/v/vuefinder-wsgi)](https://pypi.org/project/fs.filefs/)
+[![LICENSE](https://img.shields.io/github/license/abichinger/fs.filefs)](https://github.com/abichinger/fs.filefs/blob/main/LICENSE)
+
 This package provides `FileFS`, a custom filesystem for [pyfilesystem2](https://pyfilesystem2.readthedocs.io/) that allows you to mount files from other filesystems.
 
 ## Installation
