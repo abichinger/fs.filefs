@@ -1,7 +1,7 @@
 from fs.base import FS
 from fs.info import Info
 from fs.errors import ResourceNotFound, ResourceReadOnly, Unsupported
-from fs.path import basename
+from fs.path import basename, normpath
 from typing import Dict
 
 class FileFS(FS):
@@ -22,35 +22,36 @@ class FileFS(FS):
         """
         Mount a file from another filesystem.
         """
+        path = normpath(path)
         if fs.isdir(path):
             raise Unsupported(path)
-        self._files[name or basename(path)] = (fs, path)
+        self._files[normpath(name or basename(path))] = (fs, path)
 
     def remove_file(self, name):
         if name in self._files:
-            del self._files[name]
+            del self._files[normpath(name)]
 
     def listdir(self, path):
         if path != "/":
             raise ResourceNotFound(path)
         return list(self._files.keys())
 
-    def openbin(self, path, mode="r", **kwargs):
+    def _delegate(self, path) -> tuple[FS, str]:
+        path = normpath(path)
         if path not in self._files:
             raise ResourceNotFound(path)
-        fs, dst_path = self._files[path]
+        return self._files[path]
+
+    def openbin(self, path, mode="r", **kwargs):
+        fs, dst_path = self._delegate(path)
         return fs.openbin(dst_path, mode=mode, **kwargs)
 
     def getinfo(self, path, namespaces=None):
-        if path not in self._files:
-            raise ResourceNotFound(path)
-        fs, dst_path = self._files[path]
+        fs, dst_path = self._delegate(path)
         return fs.getinfo(dst_path, namespaces)
 
     def setinfo(self, path, info):
-        if path not in self._files:
-            raise ResourceNotFound(path)
-        fs, dst_path = self._files[path]
+        fs, dst_path = self._delegate(path)
         return fs.setinfo(dst_path, info)
 
     def makedir(self, path, permissions=None, recreate=False):
