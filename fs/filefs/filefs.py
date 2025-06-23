@@ -1,13 +1,15 @@
 from fs.base import FS
 from fs.info import Info
 from fs.errors import ResourceNotFound, ResourceReadOnly, Unsupported
-from fs.path import basename, normpath
+from fs.path import basename
 from typing import Dict
+
 
 class FileFS(FS):
     """
     A custom filesystem that allows mounting files from other filesystems.
     """
+
     _meta = {
         "virtual": True,
         "read_only": False,
@@ -22,14 +24,13 @@ class FileFS(FS):
         """
         Mount a file from another filesystem.
         """
-        path = normpath(path)
         if fs.isdir(path):
             raise Unsupported(path)
-        self._files[normpath(name or basename(path))] = (fs, path)
+        self._files[basename(name or basename(path))] = (fs, path)
 
     def remove_file(self, name):
         if name in self._files:
-            del self._files[normpath(name)]
+            del self._files[basename(name)]
 
     def listdir(self, path):
         if path != "/":
@@ -37,7 +38,7 @@ class FileFS(FS):
         return list(self._files.keys())
 
     def _delegate(self, path) -> tuple[FS, str]:
-        path = normpath(path)
+        path = basename(path)
         if path not in self._files:
             raise ResourceNotFound(path)
         return self._files[path]

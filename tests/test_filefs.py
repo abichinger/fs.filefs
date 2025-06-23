@@ -22,6 +22,10 @@ class TestFileFS(unittest.TestCase):
     def test_listdir(self):
         self.assertListEqual(self.filefs.listdir("/"), ["foo.txt", "foobar.txt", "log.txt"])
 
+    def test_getinfo(self):
+        self.filefs.getinfo("foo.txt")
+        self.filefs.getinfo("/foo.txt")
+
     def test_read_file(self):
         with self.filefs.openbin("foo.txt") as f:
             self.assertEqual(f.read(), b"foo")
