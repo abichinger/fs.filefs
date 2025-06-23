@@ -26,4 +26,4 @@ Homepage = "https://github.com/abichinger/fs.filefs"
 Issues = "https://github.com/abichinger/fs.filefs/issues"
 
 [tool.setuptools]
-packages = ["fs"]
+packages = ["fs.filefs"]
