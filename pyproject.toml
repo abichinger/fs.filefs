@@ -10,12 +10,12 @@ readme = "README.md"
 requires-python = ">=3.9"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
 dependencies = [
     "fs>=2.4.16"
 ]
+license = "MIT" 
 
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]
@@ -24,3 +24,6 @@ build-backend = "setuptools.build_meta"
 [project.urls]
 Homepage = "https://github.com/abichinger/fs.filefs"
 Issues = "https://github.com/abichinger/fs.filefs/issues"
+
+[tool.setuptools]
+packages = ["fs"]
